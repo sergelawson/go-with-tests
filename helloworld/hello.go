@@ -3,10 +3,23 @@ package helloworld
 
 const englishHelloPrefix = "Hello, "
 
-func Hello(name string) string {
+var HelloMap = map[string]string{
+	"Spanish": "Hola, ",
+	"French":  "Bonjour, ",
+	"German":  "Hallo, ",
+	"English": "Hello, ",
+}
+
+func Hello(name , language string) string {
 
 	if name == "" {
 		name = "World"
 	}
-	return englishHelloPrefix + name
+
+	helloPrefix := HelloMap["English"]
+
+	if language != "" {
+		helloPrefix = HelloMap[language]
+	}
+	return helloPrefix + name
 }
