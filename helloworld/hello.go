@@ -1,8 +1,5 @@
 package helloworld
 
-
-const englishHelloPrefix = "Hello, "
-
 var HelloMap = map[string]string{
 	"Spanish": "Hola, ",
 	"French":  "Bonjour, ",
@@ -10,7 +7,7 @@ var HelloMap = map[string]string{
 	"English": "Hello, ",
 }
 
-func Hello(name , language string) string {
+func Hello(name, language string) string {
 
 	if name == "" {
 		name = "World"
