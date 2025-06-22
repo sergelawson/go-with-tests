@@ -18,7 +18,6 @@ func Server(store Store) http.HandlerFunc {
 			fmt.Println("request cancelled")
 			return
 		}
-
 		fmt.Fprint(w, data)
 	}
 }
