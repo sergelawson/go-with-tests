@@ -7,16 +7,20 @@ import (
 )
 
 func TestNewBlogPost(t *testing.T) {
+	const (
+		post1 = `Title: HTML
+Description: How to build a website in HTML
+	`
+		post2 = `Title: CSS
+Description: How to style a website with CSS
+	`
+	)
 	fs := fstest.MapFS{
-		"hello.md": {Data: []byte("Title: Post 1")},
-		"world.md": {Data: []byte("Title: World")},
+		"post1.md": {Data: []byte(post1)},
+		"post2.md": {Data: []byte(post2)},
 	}
 
 	posts, error := NewPostsFromFS(fs)
-
-	got := posts[0]
-
-	want := Post{Title: "Post 1"}
 
 	if error != nil {
 		t.Fatal(error)
@@ -25,6 +29,12 @@ func TestNewBlogPost(t *testing.T) {
 	if len(posts) != len(fs) {
 		t.Errorf("got %d posts, wanted %d posts", len(posts), len(fs))
 	}
+
+	assertPost(t, posts[0], Post{Title: "HTML", Description: "How to build a website in HTML"})
+}
+
+func assertPost(t testing.TB, got Post, want Post) {
+	t.Helper()
 
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("want %+v, got: %+v", want, got)
