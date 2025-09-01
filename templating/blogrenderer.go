@@ -1,9 +1,9 @@
 package templating
 
 import (
-	"fmt"
+	"embed"
+	"html/template"
 	"io"
-	"strings"
 )
 
 // if you're continuing from the read files chapter, you shouldn't redefine this
@@ -12,19 +12,23 @@ type Post struct {
 	Tags                     []string
 }
 
+var (
+	//go:embed "templates"
+	postTemplates embed.FS
+)
+
 func Render(w io.Writer, p Post) error {
-	contentBuilder := strings.Builder{}
 
-	contentBuilder.WriteString(fmt.Sprintf("<h1>%s</h1>\n", p.Title))
-	contentBuilder.WriteString(fmt.Sprintf("<p>%s</p>\n", p.Description))
-	contentBuilder.WriteString("Tags: <ul>")
-	for _, tag := range p.Tags {
-		contentBuilder.WriteString(fmt.Sprintf("<li>%s</li>", tag))
+	templ, err := template.ParseFS(postTemplates, "templates/index.gohtml")
 
+	if err != nil {
+
+		return err
 	}
-	contentBuilder.WriteString("</ul>")
 
-	_, err := fmt.Fprint(w, contentBuilder.String())
+	if err := templ.Execute(w, p); err != nil {
 
-	return err
+		return err
+	}
+	return nil
 }
