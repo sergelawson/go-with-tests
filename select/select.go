@@ -6,30 +6,29 @@ import (
 	"time"
 )
 
-var ErrTimeout  = errors.New("timeout, request delayed over 10 seconds")
+var ErrTimeout = errors.New("timeout, request delayed over 10 seconds")
 
 func WebsiteRacer(a, b string) (string, error) {
 
 	select {
-	case <- ping(a): 
+	case <-ping(a):
 
-	return a, nil
+		return a, nil
 
-	case <- ping(b):
+	case <-ping(b):
 		return b, nil
 
-	case <- time.After(10 * time.Second): 
+	case <-time.After(10 * time.Second):
 
-	return "", ErrTimeout
+		return "", ErrTimeout
 	}
 }
 
-
-func ping(url string) (chan struct{}){
+func ping(url string) chan struct{} {
 
 	channel := make(chan struct{})
 
-	go func(){
+	go func() {
 
 		http.Get(url)
 		close(channel)
